@@ -1,7 +1,15 @@
-var daysAgo = 1; // date must also be changed for Facebook import (automate this with an array)
+var daysAgo = 1; // date must also be changed for Facebook import
 var sheetDate = subDaysFromDate(new Date(), daysAgo);
 var token = null;
-var timeRange = "%7B%27since%27:%272017-06-18%27,%27until%27:%272017-06-18%27%7D"
+var monthGlobal = sheetDate.getMonth();
+var monthNumbersGlobal = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+monthGlobal = monthNumbersGlobal[monthGlobal];
+var timeRange = '%7B%27since%27:%27' + sheetDate.getFullYear() + '-' + monthGlobal + '-' + sheetDate.getDate() + '%27,%27until%27:%27' + sheetDate.getFullYear() + '-' + monthGlobal + '-' + sheetDate.getDate() + '%27%7D';
+
+function timeRangeChecker() {
+  Logger.log(timeRange);
+  return timeRange;
+}
 
 function subDaysFromDate(date,d){
   // d = number of day ro substract and date = start date

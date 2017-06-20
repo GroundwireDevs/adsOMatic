@@ -1,7 +1,15 @@
-var daysAgo = 1; // date must also be changed for Facebook import (automate this with an array)
+var daysAgo = 1; // date must also be changed for Facebook import
 var sheetDate = subDaysFromDate(new Date(), daysAgo);
 var token = null;
-var timeRange = "%7B%27since%27:%272017-06-11%27,%27until%27:%272017-06-11%27%7D"
+var monthGlobal = sheetDate.getMonth();
+var monthNumbersGlobal = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+monthGlobal = monthNumbersGlobal[monthGlobal];
+var timeRange = '%7B%27since%27:%27' + sheetDate.getFullYear() + '-' + monthGlobal + '-' + sheetDate.getDate() + '%27,%27until%27:%27' + sheetDate.getFullYear() + '-' + monthGlobal + '-' + sheetDate.getDate() + '%27%7D';
+
+function timeRangeChecker() {
+  Logger.log(timeRange);
+  return timeRange;
+}
 
 function subDaysFromDate(date,d){
   // d = number of day ro substract and date = start date
@@ -173,6 +181,24 @@ function echoImport() {
   }
 }
 
+function fillInZeroes() {
+  var firstRow = firstDateRow();
+  var lastRow = lastDateRow();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var totalRange = ss.getRange('F' + firstRow + ':F' + lastRow);
+  var totalValues = ss.getRange('F' + firstRow + ':F' + lastRow).getValues();
+  for (var j = 0; j <= (lastRow - firstRow); j++) {
+    if (totalValues[0,j] == '') {
+      ss.getRange('F' + (firstRow + j)).setValue(0);
+      ss.getRange('G' + (firstRow + j)).setValue(0);
+      ss.getRange('H' + (firstRow + j)).setValue(0);
+      ss.getRange('I' + (firstRow + j)).setValue(0);
+      ss.getRange('J' + (firstRow + j)).setValue(0);
+      ss.getRange('K' + (firstRow + j)).setValue(0);
+    }
+  }
+}
+
 function importAll() {
  facebookImport();
  echoImport();
@@ -193,7 +219,7 @@ function firstDateRow() {
   var dayValues = ss.getRange('Y1:Y' + lastRow).getValues();
   dayValues.splice(0, 0, 'nothing') // This adds a value to the beginning of the array so that the array and the row indexes line up
   
-  for (var j = 1; j <= nextRow(); j++) {
+  for (var j = 1; j <= lastRow; j++) {
     if (yearValues[0,j] == sheetDate.getFullYear() && monthValues[0,j] == month && dayValues[0,j] == sheetDate.getDate()) {
       Logger.log(j);
       return j;
@@ -216,7 +242,7 @@ function lastDateRow() {
   var dayValues = ss.getRange('Y1:Y' + lastRow).getValues();
   dayValues.splice(0, 0, 'nothing') // This adds a value to the beginning of the array so that the array and the row indexes line up
   
-  for (var j = nextRow(); j >= 0; j--) {
+  for (var j = lastRow; j >= 0; j--) {
     if (yearValues[0,j] == sheetDate.getFullYear() && monthValues[0,j] == month && dayValues[0,j] == sheetDate.getDate()) {
       Logger.log(j);
       return j;
@@ -277,9 +303,25 @@ function saveAsCSV() {
     // Convert the range data to CSV format
     var csvFile = csvGeneration();
     // Create a file in Drive with the given name, the CSV data and MimeType (file type)
-    DriveApp.createFile(fileName, csvFile, MimeType.CSV);
+    // DriveApp.createFile(fileName, csvFile, MimeType.CSV); // Saves the file to Drive
+    return csvFile;
   }
   else {
     Browser.msgBox("Error: Please enter a CSV file name.");
   }
+}
+
+function uploadData() {
+  csvData = saveAsCSV();
+  var accountId = '58976712';
+  var webPropertyId = 'UA-58976712-1';
+  var customDataSourceId = 'JkQGfz6oRlCfD2sOOduUGg';
+  var mediaData = Utilities.newBlob(csvData, 'application/octet-stream', 'GA import data');
+  file = Analytics.Management.Uploads.uploadData(accountId, webPropertyId, customDataSourceId, mediaData)
+}
+
+function nightly() {
+  importAll();
+  fillInZeroes()
+  uploadData();
 }

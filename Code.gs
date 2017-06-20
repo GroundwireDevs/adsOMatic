@@ -1,7 +1,7 @@
 var daysAgo = 1; // date must also be changed for Facebook import (automate this with an array)
 var sheetDate = subDaysFromDate(new Date(), daysAgo);
 var token = null;
-var timeRange = "%7B%27since%27:%272017-06-11%27,%27until%27:%272017-06-11%27%7D"
+var timeRange = "%7B%27since%27:%272017-06-18%27,%27until%27:%272017-06-18%27%7D"
 
 function subDaysFromDate(date,d){
   // d = number of day ro substract and date = start date
@@ -193,7 +193,7 @@ function firstDateRow() {
   var dayValues = ss.getRange('Y1:Y' + lastRow).getValues();
   dayValues.splice(0, 0, 'nothing') // This adds a value to the beginning of the array so that the array and the row indexes line up
   
-  for (var j = 1; j <= nextRow(); j++) {
+  for (var j = 1; j <= lastRow; j++) {
     if (yearValues[0,j] == sheetDate.getFullYear() && monthValues[0,j] == month && dayValues[0,j] == sheetDate.getDate()) {
       Logger.log(j);
       return j;
@@ -216,7 +216,7 @@ function lastDateRow() {
   var dayValues = ss.getRange('Y1:Y' + lastRow).getValues();
   dayValues.splice(0, 0, 'nothing') // This adds a value to the beginning of the array so that the array and the row indexes line up
   
-  for (var j = nextRow(); j >= 0; j--) {
+  for (var j = lastRow; j >= 0; j--) {
     if (yearValues[0,j] == sheetDate.getFullYear() && monthValues[0,j] == month && dayValues[0,j] == sheetDate.getDate()) {
       Logger.log(j);
       return j;

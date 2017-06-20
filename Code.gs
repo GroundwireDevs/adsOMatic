@@ -277,9 +277,19 @@ function saveAsCSV() {
     // Convert the range data to CSV format
     var csvFile = csvGeneration();
     // Create a file in Drive with the given name, the CSV data and MimeType (file type)
-    DriveApp.createFile(fileName, csvFile, MimeType.CSV);
+    // DriveApp.createFile(fileName, csvFile, MimeType.CSV); // Saves the file to Drive
+    return csvFile;
   }
   else {
     Browser.msgBox("Error: Please enter a CSV file name.");
   }
+}
+
+function uploadData() {
+  csvData = saveAsCSV();
+  var accountId = '58976712';
+  var webPropertyId = 'UA-58976712-1';
+  var customDataSourceId = 'JkQGfz6oRlCfD2sOOduUGg';
+  var mediaData = Utilities.newBlob(csvData, 'application/octet-stream', 'GA import data');
+  file = Analytics.Management.Uploads.uploadData(accountId, webPropertyId, customDataSourceId, mediaData)
 }

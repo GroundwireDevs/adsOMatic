@@ -181,6 +181,24 @@ function echoImport() {
   }
 }
 
+function fillInZeroes() {
+  var firstRow = firstDateRow();
+  var lastRow = lastDateRow();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var totalRange = ss.getRange('F' + firstRow + ':F' + lastRow);
+  var totalValues = ss.getRange('F' + firstRow + ':F' + lastRow).getValues();
+  for (var j = 0; j <= (lastRow - firstRow); j++) {
+    if (totalValues[0,j] == '') {
+      ss.getRange('F' + (firstRow + j)).setValue(0);
+      ss.getRange('G' + (firstRow + j)).setValue(0);
+      ss.getRange('H' + (firstRow + j)).setValue(0);
+      ss.getRange('I' + (firstRow + j)).setValue(0);
+      ss.getRange('J' + (firstRow + j)).setValue(0);
+      ss.getRange('K' + (firstRow + j)).setValue(0);
+    }
+  }
+}
+
 function importAll() {
  facebookImport();
  echoImport();
@@ -300,4 +318,10 @@ function uploadData() {
   var customDataSourceId = 'JkQGfz6oRlCfD2sOOduUGg';
   var mediaData = Utilities.newBlob(csvData, 'application/octet-stream', 'GA import data');
   file = Analytics.Management.Uploads.uploadData(accountId, webPropertyId, customDataSourceId, mediaData)
+}
+
+function nightly() {
+  importAll();
+  fillInZeroes()
+  uploadData();
 }

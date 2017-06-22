@@ -315,7 +315,7 @@ function uploadData() {
   csvData = saveAsCSV();
   var accountId = '58976712';
   var webPropertyId = 'UA-58976712-1';
-  var customDataSourceId = 'JkQGfz6oRlCfD2sOOduUGg';
+  var customDataSourceId = 'HHsZxvJPTbu8JTozqv-25Q';
   var mediaData = Utilities.newBlob(csvData, 'application/octet-stream', 'GA import data');
   file = Analytics.Management.Uploads.uploadData(accountId, webPropertyId, customDataSourceId, mediaData)
 }

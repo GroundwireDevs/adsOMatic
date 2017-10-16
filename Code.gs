@@ -34,7 +34,7 @@ function nextRow() {
 }
 
 function facebookImport() {
-  var accessToken = '***REMOVED***';
+  var accessToken = 'FB_ACCESS_TOKEN';
   var date = 'yesterday';
   var activeAds = JSON.parse(UrlFetchApp.fetch('https://graph.facebook.com/v2.9/act_71151394/ads?time_range=' + timeRange + '&limit=100&effective_status=[%22ACTIVE%22,%22PAUSED%22,%22CAMPAIGN_PAUSED%22,%22ADSET_PAUSED%22,%22ARCHIVED%22]&access_token=' + accessToken));
   var writeRow = nextRow();
@@ -67,8 +67,8 @@ function facebookImport() {
     if (token === null) {
       // Sets the body data to be sent (Echo login email address and password)
       var payload = {
-        'email' : '***REMOVED***',
-        'password' : '***REMOVED***'
+        'email' : 'ECHO_EMAIL',
+        'password' : 'ECHO_PASSWORD'
       };
       // Sets the request options
    var options = {

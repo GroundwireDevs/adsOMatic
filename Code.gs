@@ -39,11 +39,11 @@ function nextRow() {
 function facebookImport() {
   var accessToken = scriptProperties.getProperty('FB_ACCESS_TOKEN');
   var date = 'yesterday';
-  var activeAds = JSON.parse(UrlFetchApp.fetch('https://graph.facebook.com/v2.9/act_71151394/ads?time_range=' + timeRange + '&limit=100&effective_status=[%22ACTIVE%22,%22PAUSED%22,%22CAMPAIGN_PAUSED%22,%22ADSET_PAUSED%22,%22ARCHIVED%22]&access_token=' + accessToken));
+  var activeAds = JSON.parse(UrlFetchApp.fetch('https://graph.facebook.com/v2.10/act_71151394/ads?time_range=' + timeRange + '&limit=100&effective_status=[%22ACTIVE%22,%22PAUSED%22,%22CAMPAIGN_PAUSED%22,%22ADSET_PAUSED%22,%22ARCHIVED%22]&access_token=' + accessToken));
   var writeRow = nextRow();
   var response;
   for (var i = 0; i < activeAds.data.length; i++) {
-    response = JSON.parse(UrlFetchApp.fetch('https://graph.facebook.com/v2.9/' + activeAds.data[i].id + '/insights?fields=ad_name,campaign_name,spend&time_range=' + timeRange + '&access_token=' + accessToken));
+    response = JSON.parse(UrlFetchApp.fetch('https://graph.facebook.com/v2.10/' + activeAds.data[i].id + '/insights?fields=ad_name,campaign_name,spend&time_range=' + timeRange + '&access_token=' + accessToken));
     // If there is something in the response.data array (if money was spent on the ad that day)
     if (response.data.length > 0) {
       // Writes date

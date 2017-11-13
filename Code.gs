@@ -1,7 +1,7 @@
 // Gets Properties object
 var scriptProperties = PropertiesService.getScriptProperties();
 
-var daysAgo = 1; // date must also be changed for Facebook import
+var daysAgo = 1;
 var sheetDate = subDaysFromDate(new Date(), daysAgo);
 var token = null;
 var monthGlobal = sheetDate.getMonth();
